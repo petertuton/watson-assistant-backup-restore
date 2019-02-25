@@ -137,17 +137,21 @@ ic fn package create watson-assistant-backup-restore
 ```
 
 ## Create the IBM Cloud Functions actions - note the use of `-a conductor true`, making these actions 'conductor' actions
+Create the backup action in the region (and associated CF org and space) where the primary Assistant instances resides.
+Create the restore action in the secondary region. 
 ```
 ic fn action update watson-assistant-backup-restore/backup backup.js -a conductor true
 ic fn action update awatson-assistant-backup-restore/restore restore.js -a conductor true
 ```
 
 ## Command to run backup action
+Ensure you're CLI is set to the appropriate region and CF is targeted...
 ```
 ic fn action invoke assistant-dr/backup --result --blocking --param bucket <bucket_name> --param workspace_id <workspace_id_to_backup>
 ```
 
 ## Command to run restore action (the CLI must be set to the region into which you want to restore)
+Ensure you CLI is set to the appropriate region and CF is targeted...
 ```
 ic fn action invoke assistant-dr/restore --result --blocking --param bucket waha-cloud-object-storage --param from_workspace_id <workspace_id_with_backup> --param to_workspace_id <workspace_id_to_restore>
 ```
