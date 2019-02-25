@@ -6,18 +6,20 @@ IBM Cloud Functions code to backup and restore Watson Assistant configuration us
     - At least the primary service instance and skills should exist. For test purposes, you can create a new workspace using the sample available in the Watson Assistant UI
     - To create a new secondary instance and a new, empty workspace/skill in a different region to the primary workspace
 2. Cloud Object Storage (COS) service instance has been created with HMAC credentials, and a suitable bucket is available
-    - To create a new COS service instance from the Cloud Catalog: https://cloud.ibm.com/catalog/services/cloud-object-storage
-    - To create a new COS bucket: ... 
-    - To create a new service credentials with the 'writer' role and ensuring "Include HMAC Credential" is selected: ... 
+    - [To create a new COS service instance from the Cloud Catalog](https://cloud.ibm.com/catalog/services/cloud-object-storage)
+    - To create a new COS bucket (TODO)
+    - To create a new service credentials with the 'writer' role and ensuring "Include HMAC Credential" is selected (TODO)
 3. IBM Cloud CLI is installed
-    - To install: https://cloud.ibm.com/docs/cli/reference/ibmcloud?topic=cloud-cli-install-ibmcloud-cli#install_use
+    - [To install the CLI](https://cloud.ibm.com/docs/cli/reference/ibmcloud?topic=cloud-cli-install-ibmcloud-cli#install_use)
 4. IBM Cloud Functions CLI plug-in is installed
-    - To install: https://cloud.ibm.com/docs/openwhisk?topic=cloud-functions-cloudfunctions_cli#cloudfunctions_cli
+    - [To install to plug-in](https://cloud.ibm.com/docs/openwhisk?topic=cloud-functions-cloudfunctions_cli#cloudfunctions_cli)
 5. The two regions to be used in the article include "US South" (Dallas) and "US East" (Washington DC).
 
 # Steps
 Login to IBM Cloud
-```ic login```
+```
+ic login
+```
 
 Target Cloud Foundry and US South region (Dallas)
 `ic target -r us-south --cf`
