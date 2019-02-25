@@ -17,7 +17,7 @@ IBM Cloud Functions code to backup and restore Watson Assistant configuration us
 
 # Steps
 Login to IBM Cloud
-`ic login`
+```ic login```
 
 Target Cloud Foundry and US South region (Dallas)
 `ic target -r us-south --cf`
