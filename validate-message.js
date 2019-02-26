@@ -25,6 +25,7 @@ function main(params) {
 
       // Check for a supplied expected_output to use in validation
       let expected_output = params.expected_output;
+      delete params.expected_output;
       if (expected_output === undefined) {
         // No expected output provided - default it
         expected_output = "You're welcome. Just let me know if you need anything else"
@@ -36,8 +37,6 @@ function main(params) {
         $step: 1,
         expected_output
       }
-      // Remove any params not needed for the current action
-      delete params.expected_output;
 
       return { action: 'assistant-v1/message', params, state } 
     }
