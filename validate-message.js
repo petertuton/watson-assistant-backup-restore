@@ -14,7 +14,7 @@ function main(params) {
       let input = params.input;
       delete params.input;
       if (input === undefined) {
-        // No input - defaul to "Thanks!"
+        // No input - default it
         input = "Thanks!";
       }
       params = Object.assign({
