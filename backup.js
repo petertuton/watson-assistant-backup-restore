@@ -5,6 +5,10 @@ function main(params) {
   switch (step) {
     // Get the workspace information
     case 0: {
+      // TODO: Check for required params: 
+      // - workspace_id
+      // - bucket
+
       // Delete any presence of 'include_audit' param and force it to true
       delete params.include_audit
       params = Object.assign({
