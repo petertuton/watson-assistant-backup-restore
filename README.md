@@ -1,6 +1,9 @@
 # watson-assistant-backup-restore
 IBM Cloud Functions code to backup and restore Watson Assistant configuration using Cloud Object Storage
 
+# Architecture
+[Architecture](https://github.com/ptuton/watson-assistant-backup-restore/WatsonAssistantBackupRestore.jpg)
+
 # Assumptions: 
 1. Both primary and secondary Watson Assistant service instances and workspaces/skills have been created
     - At least the primary service instance and skills should exist. For test purposes, you can create a new workspace using the sample available in the Watson Assistant UI
