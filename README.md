@@ -21,37 +21,36 @@ Login to IBM Cloud
 ic login
 ```
 
-Target Cloud Foundry and US South region (Dallas)
+Target Cloud Foundry and the region in which the primary Waton Assistant instance is located (e.g. `us-south` or `us-east`)
 ```
-ic target -r us-south --cf
+ic target -r <region> --cf
 ```
 
 ## Bind Cloud Functions to Watson Assistant instances
-In Functions, install the Watson Assistant package: https://cloud.ibm.com/docs/openwhisk/ow_watson_assistant.html#watson-assistant-package
+In Cloud Functions, you'll deploy the [Watson Assistant package](https://cloud.ibm.com/docs/openwhisk/ow_watson_assistant.html#watson-assistant-package)
 
-Download the Watson packages for IBM Cloud Functions
+Download the Watson packages for Cloud Functions
+```
 git clone https://github.com/watson-developer-cloud/openwhisk-sdk
 ```
+Deploy the package to Cloud Functions and verify it was created
+```
 ic fn deploy --manifest openwhisk-sdk/packages/assistant-v1/manifest.yaml
+ic fn package list | grep assistant-v1
 ```
-
-Verify the package was created
-```
-ic fn package list
-```
-(^ should list "assistant-v1" package)
 
 Create version parameter for the package - setting this after the binding removes the binding...
+- check for the latest version in the [API reference](https://cloud.ibm.com/apidocs/assistant#versioning)
+- at the time of writing, the latest verion was `2018-09-20`
 ```
-ic fn package update assistant-v1 --param version 2018-09-20
+ic fn package update assistant-v1 --param version <version>
 ```
-(^ check the api for the latest version to pass here...)
 
 List the available service instances
 ```
 ic resource service-instances
 ```
-^ find the relevant Assistant instance
+Locate the relevant Watson Assistant instance and record its name, replacing `<service_name>` (below) with the appropriate value
 
 List the available service instance keys
 ```
@@ -62,46 +61,44 @@ Bind the service instance to the package
 ```
 ic fn service bind conversation assistant-v1 --instance <instance_name> --keyname <credentials_name>
 ```
-^ if there's only one instance with only one set of credentials, the bind request will pick them by default
 
-Verify there are two (sets of) parameters: version and __bx_creds
+Verify there are two (sets of) parameters: `version` and `__bx_creds`
 ```
 ic fn package get assistant-v1 parameters
 ```
 
-Verify configuration by listing the workspaces
+Verify the configuration by listing the workspaces
 ```
-ic fn action invoke --result assistant-v1/list-workspaces
-```
-
-Record the workspace_id intended for backup/restore for use later...
-
-Switch to us-east region
-```
-ic target -r us-east
+ic fn action invoke --blocking --result assistant-v1/list-workspaces
 ```
 
-**Perform the same actions for the secondary region...**
+Record the `workspace_id` that is intended for backup/restore for use later...
 
-Switch back to us-south region
+Switch to the region in which the secondary Watson Assistant instance is located
 ```
-ic target -r us-south
+ic target -r <region>
 ```
+
+**Perform the above steps for the secondary region... then switch back to the primary region**
 
 ## Bind Cloud Functions to Cloud Object Storage
+In Cloud Functions, you'll deploy the [Cloud Object Storage package](https://cloud.ibm.com/docs/openwhisk?topic=cloud-functions-cloud_object_storage_actions#cloud_object_storage_actions)
 
-Download the Cloud Object Storage package for IBM Cloud Function
+Download the Cloud Object Storage package for Cloud Functions
+```
 git clone https://github.com/ibm-functions/package-cloud-object-storage.git
 ```
+Deploy the package to Cloud Functions and verify it was created
+```
 ic fn deploy --manifest package-cloud-object-storage/runtimes/nodejs/manifest.yaml
-ic fn package list
+ic fn package list | grep cloud-object-storage
 ```
 
 List the available service instances
 ```
 ic resource service-instances
 ```
-^ find the relevant Cloud Object Storage instance
+Locate the relevant Cloud Object Storage instance and record its name, replacing `<service_name>` (below) with the appropriate value
 
 List the available service instance keys
 ```
@@ -113,23 +110,23 @@ Bind the service instance to the package
 ic fn service bind cloud-object-storage cloud-object-storage --instance <instance_name> --keyname <credentials_name>
 ```
 
-Verify the parameters: __bx_creds
+Verify the parameters: `__bx_creds`
 ```
 ic fn package get cloud-object-storage parameters
 ```
 
-Test writing to the bucket
+Test writing to the Cloud Object Storage bucket
 ```
-ic fn action invoke /_/cloud-object-storage/object-write --blocking --result --param bucket <bucket_name> --param key data.txt --param body "my_test_data"
+ic fn action invoke cloud-object-storage/object-write --blocking --result --param bucket <bucket_name> --param key data.txt --param body "my_test_data"
 ```
 
 Test reading from the bucket
 ```
-ic fn action invoke /_/cloud-object-storage/object-read --blocking --result --param bucket <bucket_name> --param key data.txt
+ic fn action invoke cloud-object-storage/object-read --blocking --result --param bucket <bucket_name> --param key data.txt
 ```
 
 ## Get the code
-From [here](https://github.com/ptuton/watson-assistant-backup-restore)
+From [here](https://github.com/ptuton/watson-assistant-backup-restore)!
 
 ## Create a package in IBM Cloud Functions
 ```
@@ -142,18 +139,18 @@ Create the backup action in the region (and associated CF org and space) where t
 Create the restore action in the secondary region. 
 ```
 ic fn action update watson-assistant-backup-restore/backup backup.js -a conductor true
-ic fn action update awatson-assistant-backup-restore/restore restore.js -a conductor true
+ic fn action update watson-assistant-backup-restore/restore restore.js -a conductor true
 ```
 
 ## Command to run backup action
 - the CLI must be set to the region into which you want to backup
 ```
-ic fn action invoke assistant-dr/backup --result --blocking --param bucket <bucket_name> --param workspace_id <workspace_id_to_backup>
+ic fn action invoke watson-assistant-backup-restore/backup --result --blocking --param bucket <bucket_name> --param workspace_id <workspace_id_to_backup>
 ```
 
 ## Command to run restore action 
 - the CLI must be set to the region into which you want to restore
 
 ```
-ic fn action invoke assistant-dr/restore --result --blocking --param bucket <bucket_name> --param from_workspace_id <workspace_id_with_backup> --param to_workspace_id <workspace_id_to_restore>
+ic fn action invoke watson-assistant-backup-restore/restore --result --blocking --param bucket <bucket_name> --param from_workspace_id <workspace_id_with_backup> --param to_workspace_id <workspace_id_to_restore>
 ```
