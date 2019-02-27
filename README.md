@@ -13,7 +13,6 @@ IBM Cloud Functions code to backup and restore Watson Assistant configuration us
     - [To install the CLI](https://cloud.ibm.com/docs/cli/reference/ibmcloud?topic=cloud-cli-install-ibmcloud-cli#install_use)
 4. IBM Cloud Functions CLI plug-in is installed
     - [To install to plug-in](https://cloud.ibm.com/docs/openwhisk?topic=cloud-functions-cloudfunctions_cli#cloudfunctions_cli)
-5. The two regions to be used in the article include "US South" (Dallas) and "US East" (Washington DC).
 
 # Steps
 Login to IBM Cloud
@@ -27,7 +26,7 @@ ic target -r <region> --cf
 ```
 
 ## Bind Cloud Functions to Watson Assistant instances
-In Cloud Functions, you'll deploy the [Watson Assistant package](https://cloud.ibm.com/docs/openwhisk/ow_watson_assistant.html#watson-assistant-package)
+In Cloud Functions, you'll deploy the Watson Developer Cloud OpenWhisk SDK and use the [Watson Assistant package](https://cloud.ibm.com/docs/openwhisk/ow_watson_assistant.html#watson-assistant-package)
 
 Download the Watson packages for Cloud Functions
 ```
@@ -39,7 +38,8 @@ ic fn deploy --manifest openwhisk-sdk/packages/assistant-v1/manifest.yaml
 ic fn package list | grep assistant-v1
 ```
 
-Create version parameter for the package - setting this after the binding removes the binding...
+Specify the `version` parameter required for the package 
+- setting this after the binding removes the binding...
 - check for the latest version in the [API reference](https://cloud.ibm.com/apidocs/assistant#versioning)
 - at the time of writing, the latest verion was `2018-09-20`
 ```
@@ -72,7 +72,7 @@ Verify the configuration by listing the workspaces
 ic fn action invoke --blocking --result assistant-v1/list-workspaces
 ```
 
-Record the `workspace_id` that is intended for backup/restore for use later...
+Record the `workspace_id` that is intended for backup (or restore), to be used later
 
 Switch to the region in which the secondary Watson Assistant instance is located
 ```
@@ -125,31 +125,36 @@ Test reading from the bucket
 ic fn action invoke cloud-object-storage/object-read --blocking --result --param bucket <bucket_name> --param key data.txt
 ```
 
-## Get the code
+## Get the Cloud Functions Composer code
 From [here](https://github.com/ptuton/watson-assistant-backup-restore)!
 
-## Create a package in IBM Cloud Functions
+## Create a new Cloud Functions package
 ```
 ic fn package create watson-assistant-backup-restore
 ```
 
-## Create the IBM Cloud Functions actions 
+## Create a new Cloud Functions action
 - note the use of `-a conductor true`, making these actions 'conductor' actions
-Create the backup action in the region (and associated CF org and space) where the primary Assistant instances resides.
-Create the restore action in the secondary region. 
+- for more information on Composer, see [here](https://cloud.ibm.com/docs/openwhisk?topic=cloud-functions-openwhisk_composer#openwhisk_composer)
+
+Create the backup action in the region (and associated CF org and space) where the primary Watson Assistant instances resides.
+Create the restore action in the secondary region.
 ```
+ic target -r <primary_region>
 ic fn action update watson-assistant-backup-restore/backup backup.js -a conductor true
+
+ic target -r <secondary_region>
 ic fn action update watson-assistant-backup-restore/restore restore.js -a conductor true
 ```
 
 ## Command to run backup action
-- the CLI must be set to the region into which you want to backup
+The CLI must be set to the primary region
 ```
 ic fn action invoke watson-assistant-backup-restore/backup --result --blocking --param bucket <bucket_name> --param workspace_id <workspace_id_to_backup>
 ```
 
 ## Command to run restore action 
-- the CLI must be set to the region into which you want to restore
+The CLI must be set to the secondary region
 
 ```
 ic fn action invoke watson-assistant-backup-restore/restore --result --blocking --param bucket <bucket_name> --param from_workspace_id <workspace_id_with_backup> --param to_workspace_id <workspace_id_to_restore>
