@@ -4,11 +4,8 @@ IBM Cloud Functions code to backup and restore Watson Assistant configuration us
 # Assumptions: 
 1. Both primary and secondary Watson Assistant service instances and workspaces/skills have been created
     - At least the primary service instance and skills should exist. For test purposes, you can create a new workspace using the sample available in the Watson Assistant UI
-    - To create a new secondary instance and a new, empty workspace/skill in a different region to the primary workspace
 2. Cloud Object Storage (COS) service instance has been created with HMAC credentials, and a suitable bucket is available
-    - [To create a new COS service instance from the Cloud Catalog](https://cloud.ibm.com/catalog/services/cloud-object-storage)
-    - To create a new COS bucket (TODO)
-    - To create a new service credentials with the 'writer' role and ensuring "Include HMAC Credential" is selected (TODO)
+    - For information on how to create a COS service instance and bucket, refer to [the COS documentation](https://console.bluemix.net/docs/services/cloud-object-storage/getting-started.html#getting-started-console-)
 3. IBM Cloud CLI is installed
     - [To install the CLI](https://cloud.ibm.com/docs/cli/reference/ibmcloud?topic=cloud-cli-install-ibmcloud-cli#install_use)
 4. IBM Cloud Functions CLI plug-in is installed
