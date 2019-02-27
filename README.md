@@ -22,8 +22,8 @@ Target Cloud Foundry and the region in which the primary Waton Assistant instanc
 ic target -r <region> --cf
 ```
 
-## Bind Cloud Functions to Watson Assistant instances
-In Cloud Functions, you'll deploy the Watson Developer Cloud OpenWhisk SDK and use the [Watson Assistant package](https://cloud.ibm.com/docs/openwhisk/ow_watson_assistant.html#watson-assistant-package)
+## Bind Watson Assistant instances to Cloud Functions
+For information on the Watson Developer Cloud OpenWhisk SDK and the Watson Assistant package, refer to [the documentation](https://cloud.ibm.com/docs/openwhisk/ow_watson_assistant.html#watson-assistant-package)
 
 Download the Watson packages for Cloud Functions
 ```
@@ -78,7 +78,7 @@ ic target -r <region>
 
 **Perform the above steps for the secondary region... then switch back to the primary region**
 
-## Bind Cloud Functions to Cloud Object Storage
+## Bind Cloud Object Storage to Cloud Functions
 In Cloud Functions, you'll deploy the [Cloud Object Storage package](https://cloud.ibm.com/docs/openwhisk?topic=cloud-functions-cloud_object_storage_actions#cloud_object_storage_actions)
 
 Download the Cloud Object Storage package for Cloud Functions
