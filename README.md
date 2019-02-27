@@ -151,7 +151,8 @@ Ensure you're CLI is set to the appropriate region and CF is targeted...
 ic fn action invoke assistant-dr/backup --result --blocking --param bucket <bucket_name> --param workspace_id <workspace_id_to_backup>
 ```
 
-## Command to run restore action (the CLI must be set to the region into which you want to restore)
+## Command to run restore action 
+- the CLI must be set to the region into which you want to restore
 Ensure you CLI is set to the appropriate region and CF is targeted...
 ```
 ic fn action invoke assistant-dr/restore --result --blocking --param bucket <bucket_name> --param from_workspace_id <workspace_id_with_backup> --param to_workspace_id <workspace_id_to_restore>
