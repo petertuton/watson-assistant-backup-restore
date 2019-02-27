@@ -49,7 +49,6 @@ function main(params) {
         append: false
         }, params);
 
-
       // Store anything we need for the next iteration into state
       // - requires the bucket name
       let state = {
