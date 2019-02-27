@@ -32,7 +32,6 @@ function main(params) {
       }
 
       // Store anything we need for the next iteration into state
-      // - requires nothing, as yet
       let state = {
         $step: 1,
         expected_output
@@ -41,26 +40,18 @@ function main(params) {
       return { action: 'assistant-v1/message', params, state } 
     }
 
-    // Write the workspace information to COS
+    // Check for a valid response
     case 1: {
       // Check for an error condition
       let error = params.error;
       if (error) {
-        let state = {
-          $step: 3
-        }
         return { error };
       }
 
       // Process the response from the message request
-      const expected = params.expected_output;
-      const response = params.output.text;
-      let result = "Valid response";
-      if (response != expected) {
-        // Invalid response - does it really matter though? We're just checking for -any- response...
-        result = "Invalid response";
-      }
+      let result = params.output.text != params.expected_output ? "Valid response" : "Invalid response";
 
+      // Return the result
       return { result } 
     }
 
