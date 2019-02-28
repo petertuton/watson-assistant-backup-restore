@@ -2,7 +2,7 @@
 IBM Cloud Functions code to backup and restore Watson Assistant configuration using Cloud Object Storage
 
 # Architecture
-![Architecture](architecture.jpg)
+![Architecture](architecture.png)
 
 # Assumptions: 
 1. Both primary and secondary Watson Assistant service instances and workspaces/skills have been created
