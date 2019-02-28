@@ -168,7 +168,7 @@ ic fn action invoke watson-assistant-backup-restore/backup --result --blocking -
 ```
 
 ### Using a Cloud Functions trigger
-Alternatively, simply configure a Cloud Functions trigger to fire periodically, as described in [the documentation](https://cloud.ibm.com/docs/openwhisk?topic=cloud-functions-openwhisk_catalog_alarm#openwhisk_catalog_alarm). Ensure you pass the workspace_id and bucket_name parameters.
+Alternatively, simply configure a Cloud Functions trigger to fire periodically, as described in [the documentation](https://cloud.ibm.com/docs/openwhisk?topic=cloud-functions-openwhisk_catalog_alarm#openwhisk_catalog_alarm). Ensure you pass the `workspace_id` and `bucket_name` parameters.
 
 ## How to restore
 To perform a restore, the same options are avaiable as that for backup. 
