@@ -1,10 +1,21 @@
-# watson-assistant-backup-restore
-IBM Cloud Functions code to backup and restore Watson Assistant configuration using Cloud Object Storage
+# Watson Assistant backup and restore
+IBM Cloud Functions code to backup and restore Watson Assistant workspace (aka "skills") configuration using Cloud Object Storage.
+
+# Description
+This repository contains IBM Cloud Functions code and instructions to configure a backup and restore of IBM Watson Assistant workspace (aka "skills") configuration to IBM Cloud Object Storage.
+
+## Benefits
+The benefit of using IBM Cloud Functions, beyond the benefits of using serverless code, is that is provides prebuilt integration packages for Watson Assistant and Cloud Object Storage, resulting in minimal code and configuration management.
+
+The benefit of using IBM Cloud Cloud Object Storage is due to its resiliency in using a Cross Region.
+
+## Assumptions
+It is assumed the Application Code that is accessing Watson Assistant has been written to allow for (dynamic) changes in its configuration regarding accessing the Watson Assitant instance(s), i.e. the values for the API key and service endpoint URI. How to do _that_ will be the topic for another day...
 
 # Architecture
 ![Architecture](architecture.png)
 
-# Assumptions: 
+# Prerequisites: 
 1. Both primary and secondary Watson Assistant service instances and workspaces/skills have been created
     - At least the primary service instance and skills should exist. For test purposes, you can create a new workspace using the sample available in the Watson Assistant UI
 2. Cloud Object Storage (COS) service instance has been created with HMAC credentials, and a suitable bucket is available
