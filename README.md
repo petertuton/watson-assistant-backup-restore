@@ -158,15 +158,23 @@ ic target -r <secondary_region>
 ic fn action update watson-assistant-backup-restore/restore restore.js -a conductor true
 ```
 
-## Command to run backup action
-The CLI must be set to the primary region
+## How to backup
+To perform a backup, there are many options available, all of which are standard methods used to invoke Cloud Functions actions. 
+
+### Using the CLI 
+The CLI must be set to the primary region.
 ```
 ic fn action invoke watson-assistant-backup-restore/backup --result --blocking --param bucket <bucket_name> --param workspace_id <workspace_id_to_backup>
 ```
 
-## Command to run restore action 
-The CLI must be set to the secondary region
+### Using a Cloud Functions trigger
+Alternatively, simply configure a Cloud Functions trigger to fire periodically, as described in [the documentation[(https://cloud.ibm.com/docs/openwhisk?topic=cloud-functions-openwhisk_catalog_alarm#openwhisk_catalog_alarm). Ensure you pass the workspace_id and bucket_name parameters.
 
+## How to restore
+To perform a restore, the same options are avaiable as that for backup. 
+
+### Using the CLI
+The CLI must be set to the secondary region.
 ```
 ic fn action invoke watson-assistant-backup-restore/restore --result --blocking --param bucket <bucket_name> --param from_workspace_id <workspace_id_with_backup> --param to_workspace_id <workspace_id_to_restore>
 ```
